@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mynotes/views/login_views.dart';
 
 import 'firebase_options.dart';
 
@@ -36,15 +37,46 @@ class HomePage extends StatelessWidget {
               if (user?.emailVerified ?? false) {
                 print('Email is verified');
               } else {
-                print('You need to verify your email.');
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const VerifyEmailView()));
               }
-              return Text("Firebase Init Done");
+              return Text("Verification check Done");
 
             default:
               return const Text("Loading");
           }
         },
       ),
+    );
+  }
+}
+
+class VerifyEmailView extends StatefulWidget {
+  const VerifyEmailView({Key? key}) : super(key: key);
+
+  @override
+  State<VerifyEmailView> createState() => _VerifyEmailViewState();
+}
+
+class _VerifyEmailViewState extends State<VerifyEmailView> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Verify Email'),
+      ),
+      body: Column(children: [
+        Text("Please verify your email"),
+        TextButton(
+          onPressed: () async {
+            final user = FirebaseAuth.instance.currentUser;
+            await user?.sendEmailVerification();
+            print("Sent to - ");
+            print(user?.email);
+          },
+          child: const Text("Send email verification."),
+        )
+      ]),
     );
   }
 }
