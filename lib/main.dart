@@ -33,14 +33,15 @@ class HomePage extends StatelessWidget {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              final user = FirebaseAuth.instance.currentUser;
-              if (user?.emailVerified ?? false) {
-                print('Email is verified');
-              } else {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const VerifyEmailView()));
-              }
-              return Text("Verification check Done");
+              // final user = FirebaseAuth.instance.currentUser;
+              // print(user);
+              // if (user?.emailVerified ?? false) {
+              //   print('Email is verified');
+              // } else {
+              //   return const VerifyEmailView();
+              // }
+              // return Text("Verification check Done");
+              return const LoginView();
 
             default:
               return const Text("Loading");
@@ -61,22 +62,17 @@ class VerifyEmailView extends StatefulWidget {
 class _VerifyEmailViewState extends State<VerifyEmailView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Verify Email'),
-      ),
-      body: Column(children: [
-        Text("Please verify your email"),
-        TextButton(
-          onPressed: () async {
-            final user = FirebaseAuth.instance.currentUser;
-            await user?.sendEmailVerification();
-            print("Sent to - ");
-            print(user?.email);
-          },
-          child: const Text("Send email verification."),
-        )
-      ]),
-    );
+    return Column(children: [
+      Text("Please verify your email"),
+      TextButton(
+        onPressed: () async {
+          final user = FirebaseAuth.instance.currentUser;
+          await user?.sendEmailVerification();
+          print("Sent to - ");
+          print(user?.email);
+        },
+        child: const Text("Send email verification."),
+      )
+    ]);
   }
 }
